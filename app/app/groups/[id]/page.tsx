@@ -1,4 +1,6 @@
+import { use } from "react"
 import Link from "next/link"
+import React from "react"
 
 interface GroupDetails {
   id: string
@@ -60,7 +62,10 @@ const groupDetails: GroupDetails = {
   ],
 }
 
-export default function GroupDetailsPage({ params }: { params: { id: string } }) {
+export default function GroupDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  // Use params directly
+  const { id } = React.use(params);
+
   // In a real app, you would fetch the group details based on the ID
   const group = groupDetails
 
@@ -81,13 +86,13 @@ export default function GroupDetailsPage({ params }: { params: { id: string } })
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
-            href={`/app/groups/${group.id}/join`}
+            href={`/app/groups/${id}/join`}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Join Group
           </Link>
           <Link
-            href={`/app/groups/${group.id}/create-proposal`}
+            href={`/app/groups/${id}/create-proposal`}
             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Create Proposal
@@ -108,7 +113,7 @@ export default function GroupDetailsPage({ params }: { params: { id: string } })
         <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Active Proposals</h3>
           <Link
-            href={`/app/groups/${group.id}/create-proposal`}
+            href={`/app/groups/${id}/create-proposal`}
             className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             New Proposal
@@ -123,7 +128,7 @@ export default function GroupDetailsPage({ params }: { params: { id: string } })
                   <div className="px-4 py-4 sm:px-6">
                     <div className="flex items-center justify-between">
                       <Link
-                        href={`/app/groups/${group.id}/proposals/${proposal.id}`}
+                        href={`/app/groups/${id}/proposals/${proposal.id}`}
                         className="text-sm font-medium text-indigo-600 hover:text-indigo-900 truncate"
                       >
                         {proposal.title}
@@ -185,7 +190,7 @@ export default function GroupDetailsPage({ params }: { params: { id: string } })
                   <div className="px-4 py-4 sm:px-6">
                     <div className="flex items-center justify-between">
                       <Link
-                        href={`/app/groups/${group.id}/proposals/${proposal.id}`}
+                        href={`/app/groups/${id}/proposals/${proposal.id}`}
                         className="text-sm font-medium text-indigo-600 hover:text-indigo-900 truncate"
                       >
                         {proposal.title}

@@ -1,17 +1,21 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import React from "react";
 
-export default function JoinGroupPage({ params }: { params: { id: string } }) {
+export default function JoinGroupPage({ params }: {params: Promise<{ id: string }>  }) {
+  // Use params directly from props
+  const { id } = React.use(params);
+
   const router = useRouter()
   const [step, setStep] = useState<"initial" | "verification" | "success">("initial")
   const [isLoading, setIsLoading] = useState(false)
 
   // Mock group data - in a real app, you would fetch this based on the ID
   const group = {
-    id: params.id,
+    id: id,
     name: "European Citizens Feedback",
     criteriaType: "nationality" as "nationality" | "age" | "gender",
     criteriaValue: "European",
@@ -36,7 +40,7 @@ export default function JoinGroupPage({ params }: { params: { id: string } }) {
   }
 
   const handleFinish = () => {
-    router.push(`/app/groups/${params.id}`)
+    router.push(`/app/groups/${id}`)
   }
 
   return (
@@ -50,7 +54,7 @@ export default function JoinGroupPage({ params }: { params: { id: string } }) {
         </div>
         <div className="mt-4 flex md:mt-0 md:ml-4">
           <Link
-            href={`/app/groups/${params.id}`}
+            href={`/app/groups/${id}`}
             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Back to Group

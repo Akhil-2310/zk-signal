@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import Link from "next/link"
+import React from "react"
 
 interface ProposalDetails {
   id: string
@@ -19,16 +20,20 @@ interface ProposalDetails {
 export default function ProposalDetailsPage({
   params,
 }: {
-  params: { id: string; proposalId: string }
+  params: Promise<{ id: string; proposalId: string }>
 }) {
+  // Use params directly from props
+  const { id } = React.use(params);
+  const {proposalId} = React.use(params)
+
   const [userVote, setUserVote] = useState<"yes" | "no" | null>(null)
   const [isVoting, setIsVoting] = useState(false)
   const [hasVoted, setHasVoted] = useState(false)
 
   // Mock data for a specific proposal
   const proposal: ProposalDetails = {
-    id: params.proposalId,
-    groupId: params.id,
+    id: proposalId,
+    groupId: id,
     title: "Digital Privacy Standards Proposal",
     description: "Should we adopt stricter digital privacy standards across all platforms?",
     status: "active",
@@ -74,10 +79,7 @@ export default function ProposalDetailsPage({
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <Link
-              href={`/app/groups/${params.id}`}
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-            >
+            <Link href={`/app/groups/${id}`} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
               ← Back to Group
             </Link>
             <span className="text-gray-500">/</span>
