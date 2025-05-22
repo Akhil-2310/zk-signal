@@ -312,7 +312,7 @@ export default function CreateGroupPage() {
                     id="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="shadow-sm focus:ring-emerald-500 focus:border-emerald-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    className="shadow-sm focus:ring-emerald-500 focus:border-emerald-500 block w-full sm:text-sm border-gray-300 rounded-sm"
                     placeholder="e.g., European Citizens Feedback"
                     required
                   />
@@ -335,9 +335,6 @@ export default function CreateGroupPage() {
                     required
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  Brief description of your group. This will be visible to potential members.
-                </p>
               </div>
             </div>
           </div>
