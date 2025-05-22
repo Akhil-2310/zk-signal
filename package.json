@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@selfxyz/core": "^0.0.25",
+    "@selfxyz/qrcode": "^0.0.19",
+    "@semaphore-protocol/group": "^4.11.1",
+    "@semaphore-protocol/identity": "^4.11.1",
+    "@semaphore-protocol/proof": "^4.11.1",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
