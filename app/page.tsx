@@ -13,10 +13,10 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2 space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                Anonymous Voting with Zero-Knowledge Proofs
+                Anonymous Signals with Zero-Knowledge Proofs
               </h1>
               <p className="text-xl text-white/90">
-                ZKSignals enables truly anonymous voting and feedback while ensuring only eligible participants can
+                ZKSignals enables truly sending anonymous signals like votes and feedback while ensuring only eligible participants can
                 contribute. Your identity stays private, your voice matters.
               </p>
               <div className="pt-6">
