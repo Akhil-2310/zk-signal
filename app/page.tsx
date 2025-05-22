@@ -1,103 +1,291 @@
-import Image from "next/image";
+import Link from "next/link"
+import Navbar from "@/components/navbar"
+import Footer from "@/components/footer"
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-h-screen flex flex-col">
+      <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <section className="py-20 px-4 md:px-8 lg:px-16 bg-gradient-to-r from-emerald-600 to-teal-500 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2 space-y-6">
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                Anonymous Voting with Zero-Knowledge Proofs
+              </h1>
+              <p className="text-xl text-white/90">
+                ZKSignals enables truly anonymous voting and feedback while ensuring only eligible participants can
+                contribute. Your identity stays private, your voice matters.
+              </p>
+              <div className="pt-6">
+                <Link
+                  href="/app/groups"
+                  className="inline-block px-8 py-4 bg-white text-emerald-700 font-medium rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                >
+                  Launch App
+                </Link>
+                <Link
+                  href="#features"
+                  className="inline-block ml-4 px-8 py-4 bg-emerald-700 hover:bg-emerald-800 text-white font-medium rounded-lg transition-all border border-emerald-500"
+                >
+                  Learn More
+                </Link>
+              </div>
+            </div>
+            <div className="md:w-1/2">
+              <div className="relative">
+                <div className="w-full h-80 md:h-96 bg-white/10 backdrop-blur-sm rounded-xl overflow-hidden relative shadow-2xl border border-white/20">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="p-8 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 shadow-xl max-w-md">
+                      <div className="w-16 h-16 mx-auto mb-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="text-center text-white">
+                        <div className="font-bold text-xl mb-2">Privacy Guaranteed</div>
+                        <div className="text-white/80">
+                          Cast votes and provide feedback without revealing your identity. Zero-knowledge proofs ensure
+                          your privacy while verifying your eligibility.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 md:px-8 lg:px-16 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">How ZKSignals Works</h2>
+            <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+              Our platform combines cutting-edge cryptography with user-friendly design
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-6 border border-gray-200 rounded-xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Create Private Groups</h3>
+              <p className="text-gray-600">
+                Form groups based on specific criteria like nationality, age, or gender, ensuring only eligible
+                participants can join.
+              </p>
+            </div>
+
+            <div className="p-6 border border-gray-200 rounded-xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Verify Without Revealing</h3>
+              <p className="text-gray-600">
+                Using Self Protocol, verify your eligibility without exposing personal information or identity details.
+              </p>
+            </div>
+
+            <div className="p-6 border border-gray-200 rounded-xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Anonymous Signals</h3>
+              <p className="text-gray-600">
+                Cast votes and provide feedback with complete anonymity using Semaphore Protocol's zero-knowledge
+                proofs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why It Matters Section */}
+      <section className="py-20 px-4 md:px-8 lg:px-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2">
+              <div className="relative">
+                <div className="w-full h-80 md:h-96 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl overflow-hidden relative shadow-lg">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="grid grid-cols-2 gap-4 p-6">
+                      <div className="p-4 bg-white rounded-lg shadow-md">
+                        <div className="text-sm font-medium text-gray-500">Traditional Voting</div>
+                        <div className="mt-2 flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-red-500"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span className="ml-2 text-gray-700">Identity Exposed</span>
+                        </div>
+                        <div className="mt-1 flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-red-500"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span className="ml-2 text-gray-700">Potential Coercion</span>
+                        </div>
+                      </div>
+                      <div className="p-4 bg-emerald-600 text-white rounded-lg shadow-md">
+                        <div className="text-sm font-medium text-white">ZKSignals</div>
+                        <div className="mt-2 flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-white"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span className="ml-2">Complete Anonymity</span>
+                        </div>
+                        <div className="mt-1 flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-white"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span className="ml-2">Verified Eligibility</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="md:w-1/2 space-y-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Why Privacy Matters</h2>
+              <p className="text-gray-600">
+                In many contexts, revealing your identity when providing feedback or voting can lead to bias, fear of
+                retaliation, or social pressure that distorts true opinions.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 mt-1">
+                    <div className="w-5 h-5 bg-emerald-600 rounded-full"></div>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-lg font-medium text-gray-900">Freedom from Coercion</h3>
+                    <p className="mt-1 text-gray-600">
+                      When your vote can't be traced back to you, you're free to express your true opinion without fear
+                      of consequences.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 mt-1">
+                    <div className="w-5 h-5 bg-emerald-600 rounded-full"></div>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-lg font-medium text-gray-900">Honest Feedback</h3>
+                    <p className="mt-1 text-gray-600">
+                      Anonymous feedback is more likely to be honest, leading to better decision-making and more
+                      accurate results.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 mt-1">
+                    <div className="w-5 h-5 bg-emerald-600 rounded-full"></div>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-lg font-medium text-gray-900">Protection for Vulnerable Groups</h3>
+                    <p className="mt-1 text-gray-600">
+                      In some contexts, revealing identity can put individuals at risk. ZKSignals provides protection
+                      while still ensuring eligibility.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  )
 }
