@@ -5,6 +5,9 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { supabase } from "@/lib/supabaseClient"
+import { Group } from "@semaphore-protocol/group"
+import { Identity } from "@semaphore-protocol/identity"
 import Select from "react-select"
 
 // Country data interface
@@ -266,11 +269,38 @@ export default function CreateGroupPage() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate API call
-    setTimeout(() => {
-      // Redirect to groups page after "creating" the group
+    const storedSig = sessionStorage.getItem("semaphore-signature")
+    if (!storedSig) {
+      alert("Semaphore identity signature not found. Please reconnect.")
+      return
+    }
+
+    const identity = new Identity(storedSig)
+    const group = new Group()
+    group.addMember(identity.commitment)
+
+    const criteriaValue =
+      criteriaType === "nationality"
+        ? selectedCountry
+        : criteriaType === "age"
+        ? ageValue
+        : genderValue
+
+    const { error } = await supabase.from("groups").insert({
+      name,
+      description,
+      criteria_type: criteriaType,
+      criteria_value: criteriaValue,
+      members: group.members.map((m) => m.toString())
+    })
+
+    if (error) {
+      alert("Failed to create group: " + error.message)
+    } else {
       router.push("/app/groups")
-    }, 1500)
+    }
+
+    setIsSubmitting(false)
   }
 
   return (
@@ -449,13 +479,11 @@ export default function CreateGroupPage() {
               >
                 Cancel
               </Link>
-              <button
+             <button
                 type="submit"
-                disabled={isSubmitting || (criteriaType === "nationality" && !selectedCountry)}
+                disabled={isSubmitting}
                 className={`ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 ${
-                  isSubmitting || (criteriaType === "nationality" && !selectedCountry)
-                    ? "opacity-75 cursor-not-allowed"
-                    : ""
+                  isSubmitting ? "opacity-75 cursor-not-allowed" : ""
                 }`}
               >
                 {isSubmitting ? "Creating..." : "Create Group"}
