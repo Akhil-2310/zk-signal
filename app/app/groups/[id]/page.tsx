@@ -1,35 +1,39 @@
-"use client"
-import { use } from "react"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
-import { supabase } from "@/lib/supabaseClient"
+"use client";
+import { use } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 interface Proposal {
-  id: string
-  title: string
-  description: string
-  status: "active" | "closed"
-  votesYes: number
-  votesNo: number
-  created_at: string
+  id: string;
+  title: string;
+  description: string;
+  status: "active" | "closed";
+  votesYes: number;
+  votesNo: number;
+  created_at: string;
 }
 
 interface GroupDetails {
-  id: string
-  name: string
-  description: string
-  criteria_type: "nationality" | "age" | "gender"
-  criteria_value: string
-  created_at: string
-  members: string[]
-  proposals: Proposal[]
+  id: string;
+  name: string;
+  description: string;
+  criteria_type: "nationality" | "age" | "gender";
+  criteria_value: string;
+  created_at: string;
+  members: string[];
+  proposals: Proposal[];
 }
 
-export default function GroupDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
+export default function GroupDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
 
-  const [group, setGroup] = useState<GroupDetails | null>(null)
+  const [group, setGroup] = useState<GroupDetails | null>(null);
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -37,19 +41,20 @@ export default function GroupDetailsPage({ params }: { params: Promise<{ id: str
         .from("groups")
         .select("*, proposals(*)")
         .eq("id", id)
-        .single()
+        .single();
 
       if (error) {
-        console.error("Failed to fetch group details:", error)
+        console.error("Failed to fetch group details:", error);
       } else {
-        setGroup(data as GroupDetails)
+        setGroup(data as GroupDetails);
       }
-    }
+    };
 
-    if (id) fetchGroup()
-  }, [id])
+    if (id) fetchGroup();
+  }, [id]);
 
-  if (!group) return <div className="p-6 text-gray-500">Loading group details...</div>
+  if (!group)
+    return <div className="p-6 text-gray-500">Loading group details...</div>;
 
   return (
     <div className="space-y-6">
@@ -58,11 +63,22 @@ export default function GroupDetailsPage({ params }: { params: Promise<{ id: str
           <h1 className="text-2xl font-bold text-gray-900">{group.name}</h1>
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-              {group.criteria_type === "nationality" && `Nationality: ${group.criteria_value}`}
+              {group.criteria_type === "nationality" &&
+                (() => {
+                  try {
+                    const parsed = JSON.parse(group.criteria_value);
+                    return `${parsed.flag} ${parsed.label}`;
+                  } catch {
+                    return group.criteria_value; // fallback
+                  }
+                })()}
               {group.criteria_type === "age" && `Age: ${group.criteria_value}+`}
-              {group.criteria_type === "gender" && `Gender: ${group.criteria_value}`}
+              {group.criteria_type === "gender" &&
+                `Gender: ${group.criteria_value}`}
             </span>
-            <span className="text-sm text-gray-500">{group.members.length} members</span>
+            <span className="text-sm text-gray-500">
+              {group.members.length} members
+            </span>
             <span className="text-sm text-gray-500">
               Created on {new Date(group.created_at).toLocaleDateString()}
             </span>
@@ -86,7 +102,9 @@ export default function GroupDetailsPage({ params }: { params: Promise<{ id: str
 
       <div className="bg-white shadow overflow-hidden sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">Group Description</h3>
+          <h3 className="text-lg leading-6 font-medium text-gray-900">
+            Group Description
+          </h3>
         </div>
         <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
           <p className="text-sm text-gray-500">{group.description}</p>
@@ -94,7 +112,10 @@ export default function GroupDetailsPage({ params }: { params: Promise<{ id: str
       </div>
 
       {(["active", "closed"] as const).map((status) => (
-        <div key={status} className="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div
+          key={status}
+          className="bg-white shadow overflow-hidden sm:rounded-lg"
+        >
           <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
               {status === "active" ? "Active Proposals" : "Closed Proposals"}
@@ -132,7 +153,9 @@ export default function GroupDetailsPage({ params }: { params: Promise<{ id: str
                       </span>
                     </div>
                     <div className="mt-2 sm:flex sm:justify-between">
-                      <p className="text-sm text-gray-500">{proposal.description}</p>
+                      <p className="text-sm text-gray-500">
+                        {proposal.description}
+                      </p>
                       <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                         <span className="flex items-center mr-4">
                           <svg
@@ -165,5 +188,5 @@ export default function GroupDetailsPage({ params }: { params: Promise<{ id: str
         </div>
       ))}
     </div>
-  )
+  );
 }
