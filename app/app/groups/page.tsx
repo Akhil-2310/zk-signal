@@ -1,56 +1,34 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { supabase } from "@/lib/supabaseClient"
 
 interface Group {
   id: string
   name: string
   description: string
-  memberCount: number
-  criteriaType: "nationality" | "age" | "gender"
-  criteriaValue: string
-  createdAt: string
+  criteria_type: "nationality" | "age" | "gender"
+  criteria_value: string
+  members: string[]
 }
 
-// Mock data for groups
-const groups: Group[] = [
-  {
-    id: "1",
-    name: "European Citizens Feedback",
-    description: "A group for European citizens to provide anonymous feedback on policy proposals.",
-    memberCount: 128,
-    criteriaType: "nationality",
-    criteriaValue: "European",
-    createdAt: "2023-10-15",
-  },
-  {
-    id: "2",
-    name: "Over 25 Tech Survey",
-    description: "Anonymous technology usage survey for people over 25 years old.",
-    memberCount: 76,
-    criteriaType: "age",
-    criteriaValue: "25",
-    createdAt: "2023-11-02",
-  },
-  {
-    id: "3",
-    name: "Women in Tech Anonymous Feedback",
-    description: "A safe space for women in technology to share experiences and feedback anonymously.",
-    memberCount: 93,
-    criteriaType: "gender",
-    criteriaValue: "female",
-    createdAt: "2023-09-28",
-  },
-  {
-    id: "4",
-    name: "US Residents Policy Voting",
-    description: "Anonymous voting on policy proposals for US residents.",
-    memberCount: 215,
-    criteriaType: "nationality",
-    criteriaValue: "United States",
-    createdAt: "2023-10-05",
-  },
-]
-
 export default function GroupsPage() {
+  const [groups, setGroups] = useState<Group[]>([])
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const { data, error } = await supabase.from("groups").select("*")
+      if (error) {
+        console.error("Failed to fetch groups:", error.message)
+      } else {
+        setGroups(data || [])
+      }
+    }
+
+    fetchGroups()
+  }, [])
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -73,52 +51,19 @@ export default function GroupsPage() {
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="h-10 w-10 rounded-md bg-emerald-600 flex items-center justify-center text-white">
-                    {group.criteriaType === "nationality" && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"
-                        />
+                    {group.criteria_type === "nationality" && (
+                      <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
                       </svg>
                     )}
-                    {group.criteriaType === "age" && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
+                    {group.criteria_type === "age" && (
+                      <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     )}
-                    {group.criteriaType === "gender" && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
+                    {group.criteria_type === "gender" && (
+                      <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     )}
                   </div>
@@ -127,11 +72,11 @@ export default function GroupsPage() {
                   <h3 className="text-lg font-medium text-gray-900">{group.name}</h3>
                   <div className="flex items-center mt-1">
                     <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                      {group.criteriaType === "nationality" && `Nationality: ${group.criteriaValue}`}
-                      {group.criteriaType === "age" && `Age: ${group.criteriaValue}+`}
-                      {group.criteriaType === "gender" && `Gender: ${group.criteriaValue}`}
+                      {group.criteria_type === "nationality" && `Nationality: ${group.criteria_value}`}
+                      {group.criteria_type === "age" && `Age: ${group.criteria_value}+`}
+                      {group.criteria_type === "gender" && `Gender: ${group.criteria_value}`}
                     </span>
-                    <span className="ml-2 text-xs text-gray-500">{group.memberCount} members</span>
+                    <span className="ml-2 text-xs text-gray-500">{group.members.length} members</span>
                   </div>
                 </div>
               </div>
