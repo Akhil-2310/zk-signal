@@ -1,41 +1,46 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { supabase } from "@/lib/supabaseClient"
 
 interface Group {
   id: string
   name: string
   description: string
-  memberCount: number
-  criteriaType: "nationality" | "age" | "gender"
-  criteriaValue: string
-  createdAt: string
-  activeProposals: number
+  members: string[]
+  criteria_type: "nationality" | "age" | "gender"
+  criteria_value: string
+  created_at: string
+  active_proposals: number
 }
 
-// Mock data for user's groups
-const myGroups: Group[] = [
-  {
-    id: "1",
-    name: "European Citizens Feedback",
-    description: "A group for European citizens to provide anonymous feedback on policy proposals.",
-    memberCount: 128,
-    criteriaType: "nationality",
-    criteriaValue: "European",
-    createdAt: "2023-10-15",
-    activeProposals: 2,
-  },
-  {
-    id: "3",
-    name: "Women in Tech Anonymous Feedback",
-    description: "A safe space for women in technology to share experiences and feedback anonymously.",
-    memberCount: 93,
-    criteriaType: "gender",
-    criteriaValue: "female",
-    createdAt: "2023-09-28",
-    activeProposals: 1,
-  },
-]
-
 export default function MyGroupsPage() {
+  const [groups, setGroups] = useState<Group[]>([])
+  const [userCommitment, setUserCommitment] = useState<string | null>(null)
+
+  useEffect(() => {
+    const storedSig = sessionStorage.getItem("semaphore-signature")
+    if (!storedSig) return
+
+    import("@semaphore-protocol/identity").then(({ Identity }) => {
+      const identity = new Identity(storedSig)
+      setUserCommitment(identity.commitment.toString())
+    })
+  }, [])
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      if (!userCommitment) return
+      const { data, error } = await supabase.from("groups").select("*")
+      if (!error && data) {
+        const userGroups = data.filter((g) => g.members.includes(userCommitment))
+        setGroups(userGroups)
+      }
+    }
+    fetchGroups()
+  }, [userCommitment])
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -51,7 +56,7 @@ export default function MyGroupsPage() {
         </Link>
       </div>
 
-      {myGroups.length === 0 ? (
+      {groups.length === 0 ? (
         <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6 text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,58 +87,32 @@ export default function MyGroupsPage() {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {myGroups.map((group) => (
+          {groups.map((group) => (
             <div key={group.id} className="bg-white overflow-hidden shadow rounded-lg">
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="h-10 w-10 rounded-md bg-indigo-600 flex items-center justify-center text-white">
-                      {group.criteriaType === "nationality" && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"
-                          />
+                      {group.criteria_type === "nationality" && (
+                        <span role="img" aria-label="flag">
+                          {(() => {
+                            try {
+                              const parsed = JSON.parse(group.criteria_value)
+                              return parsed.flag || "🌍"
+                            } catch {
+                              return "🌍"
+                            }
+                          })()}
+                        </span>
+                      )}
+                      {group.criteria_type === "age" && (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       )}
-                      {group.criteriaType === "age" && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      )}
-                      {group.criteriaType === "gender" && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          />
+                      {group.criteria_type === "gender" && (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                       )}
                     </div>
@@ -142,11 +121,18 @@ export default function MyGroupsPage() {
                     <h3 className="text-lg font-medium text-gray-900">{group.name}</h3>
                     <div className="flex items-center mt-1">
                       <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
-                        {group.criteriaType === "nationality" && `Nationality: ${group.criteriaValue}`}
-                        {group.criteriaType === "age" && `Age: ${group.criteriaValue}+`}
-                        {group.criteriaType === "gender" && `Gender: ${group.criteriaValue}`}
+                        {group.criteria_type === "nationality" && (() => {
+                          try {
+                            const parsed = JSON.parse(group.criteria_value)
+                            return `Nationality: ${parsed.label}`
+                          } catch {
+                            return `Nationality`
+                          }
+                        })()}
+                        {group.criteria_type === "age" && `Age: ${group.criteria_value}+`}
+                        {group.criteria_type === "gender" && `Gender: ${group.criteria_value}`}
                       </span>
-                      <span className="ml-2 text-xs text-gray-500">{group.memberCount} members</span>
+                      <span className="ml-2 text-xs text-gray-500">{group.members.length} members</span>
                     </div>
                   </div>
                 </div>
@@ -154,20 +140,11 @@ export default function MyGroupsPage() {
 
                 <div className="mt-4 bg-indigo-50 p-3 rounded-md">
                   <div className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-indigo-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                        clipRule="evenodd"
-                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
                     <span className="ml-2 text-sm text-indigo-700">
-                      {group.activeProposals} active {group.activeProposals === 1 ? "proposal" : "proposals"}
+                      {group.active_proposals || 0} active {group.active_proposals === 1 ? "proposal" : "proposals"}
                     </span>
                   </div>
                 </div>
